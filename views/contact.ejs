@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact | SmartEvents</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <style>
+      /* Two-column layout with form on left and info panel on right */
+      .contact-layout {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 2rem;
+        align-items: start;
+      }
+
+      .form-card h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1.2rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border);
+      }
+
+      .form-card .btn-primary {
+        width: 100%;
+        padding: 0.7rem;
+        font-size: 0.95rem;
+      }
+
+      .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .info-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 1.2rem 1.5rem;
+      }
+
+      .info-card h3 {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+        color: var(--primary);
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.7rem;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+      }
+
+      .info-item__icon {
+        font-size: 1.2rem;
+        flex-shrink: 0;
+        width: 28px;
+        text-align: center;
+      }
+
+      .faq-item {
+        border-bottom: 1px solid var(--border);
+        padding: 0.6rem 0;
+      }
+
+      .faq-item:last-child {
+        border-bottom: none;
+      }
+
+      /* FAQ toggle: hides/shows answer and rotates arrow */
+      .faq-question {
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--text);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .faq-answer {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-top: 0.4rem;
+        display: none;
+        line-height: 1.5;
+      }
+
+      .faq-item.open .faq-answer {
+        display: block;
+      }
+
+      .faq-item.open .faq-arrow {
+        transform: rotate(180deg);
+      }
+
+      .faq-arrow {
+        transition: transform 0.2s;
+        font-size: 0.75rem;
+      }
+
+      @media (max-width: 768px) {
+        .contact-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <%- include('partials/navbar') %>
+
+    <div class="page-header">
+      <h1>📬 Contact Us</h1>
+      <p>Have a question or need help? We'd love to hear from you.</p>
+    </div>
+
+    <div class="page-wrapper">
+
+      <% if (successMsg) { %>
+        <div class="alert alert-success"><%= successMsg %></div>
+      <% } %>
+      <% if (errorMsg) { %>
+        <div class="alert alert-error"><%= errorMsg %></div>
+      <% } %>
+
+      <div class="contact-layout">
+
+        <div class="card form-card">
+          <h2>Send Us an Enquiry</h2>
+
+          <form action="/contact" method="POST">
+
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Jane Doe"
+                value="<%= user ? user.name : '' %>"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="you@example.com"
+                value="<%= user ? user.email : '' %>"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <select id="subject" name="subject" required>
+                <option value="">Select a subject</option>
+                <option value="Booking Issue">Booking Issue</option>
+                <option value="Event Enquiry">Event Enquiry</option>
+                <option value="Payment Problem">Payment Problem</option>
+                <option value="General Question">General Question</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                placeholder="Describe your question or issue in detail..."
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Send Enquiry 📨</button>
+          </form>
+        </div>
+
+        <div class="contact-info">
+
+          <div class="info-card">
+            <h3>📞 Get in Touch</h3>
+
+            <div class="info-item">
+              <span class="info-item__icon">📧</span>
+              <span>support@smartevents.co.za</span>
+            </div>
+
+            <div class="info-item">
+              <span class="info-item__icon">📱</span>
+              <span>+27 10 123 4567</span>
+            </div>
+
+            <div class="info-item">
+              <span class="info-item__icon">🕐</span>
+              <span>Mon–Fri, 8am–5pm SAST</span>
+            </div>
+
+            <div class="info-item">
+              <span class="info-item__icon">📍</span>
+              <span>Pretoria, Gauteng, South Africa</span>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <h3>❓ Common Questions</h3>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+              <div class="faq-question">
+                How do I cancel a booking?
+                <span class="faq-arrow">▼</span>
+              </div>
+              <div class="faq-answer">
+                Go to <strong>My Bookings</strong> and click the "Cancel Booking" button on any upcoming event.
+              </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+              <div class="faq-question">
+                Are tickets refundable?
+                <span class="faq-arrow">▼</span>
+              </div>
+              <div class="faq-answer">
+                Refunds are processed within 5–7 business days after cancellation, depending on the event policy.
+              </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+              <div class="faq-question">
+                Can I book for multiple people?
+                <span class="faq-arrow">▼</span>
+              </div>
+              <div class="faq-answer">
+                Yes! When booking, simply increase the ticket count on the booking form.
+              </div>
+            </div>
+
+            <div class="faq-item" onclick="toggleFaq(this)">
+              <div class="faq-question">
+                How do I become an event admin?
+                <span class="faq-arrow">▼</span>
+              </div>
+              <div class="faq-answer">
+                Contact our support team via this form, and we'll review your request within 48 hours.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <script>
+      function toggleFaq(item) {
+        item.classList.toggle("open");
+      }
+    </script>
+  </body>
+</html>
+

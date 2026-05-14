@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login / Register | SmartEvents</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <style>
+      .auth-page {
+        min-height: calc(100vh - 64px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+        background: linear-gradient(135deg, var(--primary) 0%, #0f3460 100%);
+      }
+
+      .auth-card {
+        background-color: #ffffff;
+        border-radius: 14px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 440px;
+        padding: 2.5rem 2rem;
+      }
+
+      /* Brand logo at the top */
+      .auth-card__brand {
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .auth-card__brand h2 {
+        font-size: 1.4rem;
+        color: var(--primary);
+      }
+
+      .auth-card__brand h2 span {
+        color: var(--accent);
+      }
+
+      .auth-card__brand p {
+        color: var(--text-muted);
+        font-size: 0.88rem;
+        margin-top: 0.25rem;
+      }
+
+      /* Tab switcher (Login / Register) */
+      .auth-tabs {
+        display: flex;
+        border-bottom: 2px solid var(--border);
+        margin-bottom: 1.5rem;
+      }
+
+      .auth-tab {
+        flex: 1;
+        text-align: center;
+        padding: 0.6rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -2px;
+        transition: color 0.2s, border-color 0.2s;
+      }
+
+      .auth-tab.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+      }
+
+      /* Hide inactive form panel */
+      .auth-panel {
+        display: none;
+      }
+
+      .auth-panel.active {
+        display: block;
+      }
+
+      .auth-card .btn-primary {
+        width: 100%;
+        padding: 0.7rem;
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
+      }
+
+      .auth-switch {
+        text-align: center;
+        margin-top: 1.2rem;
+        font-size: 0.88rem;
+        color: var(--text-muted);
+      }
+
+      .auth-switch a {
+        color: var(--accent);
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      /* Role selector pill buttons */
+      .role-select {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 0.4rem;
+      }
+
+      .role-select label {
+        flex: 1;
+        text-align: center;
+        padding: 0.5rem;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.88rem;
+        font-weight: 600;
+        transition: border-color 0.2s, background-color 0.2s;
+        color: var(--text-muted);
+      }
+
+      /* Highlight selected role */
+      .role-select input[type="radio"]:checked + span {
+        color: var(--accent);
+      }
+
+      .role-select input[type="radio"] {
+        display: none;
+      }
+
+      .role-select label:has(input:checked) {
+        border-color: var(--accent);
+        background-color: #fff1f3;
+        color: var(--accent);
+      }
+    </style>
+  </head>
+
+  <body>
+    <%- include('partials/navbar') %>
+
+    <div class="auth-page">
+      <div class="auth-card">
+
+        <div class="auth-card__brand">
+          <h2>🎟 Smart<span>Events</span></h2>
+          <p>Your event booking platform</p>
+        </div>
+
+        <% if (errorMsg) { %>
+          <div class="alert alert-error"><%= errorMsg %></div>
+        <% } %>
+        <% if (successMsg) { %>
+          <div class="alert alert-success"><%= successMsg %></div>
+        <% } %>
+
+        <div class="auth-tabs">
+          <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">Login</div>
+          <div class="auth-tab" id="tab-register" onclick="switchTab('register')">Register</div>
+        </div>
+
+        <div class="auth-panel active" id="panel-login">
+          <form action="/auth/login" method="POST">
+
+            <div class="form-group">
+              <label for="login-email">Email Address</label>
+              <input
+                type="email"
+                id="login-email"
+                name="email"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input
+                type="password"
+                id="login-password"
+                name="password"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+
+          <p class="auth-switch">
+            Don't have an account?
+            <a onclick="switchTab('register')">Register here</a>
+          </p>
+        </div>
+
+        <div class="auth-panel" id="panel-register">
+          <form action="/auth/register" method="POST">
+
+            <div class="form-group">
+              <label for="reg-name">Full Name</label>
+              <input
+                type="text"
+                id="reg-name"
+                name="name"
+                placeholder="Jane Doe"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="reg-email">Email Address</label>
+              <input
+                type="email"
+                id="reg-email"
+                name="email"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="reg-password">Password</label>
+              <input
+                type="password"
+                id="reg-password"
+                name="password"
+                placeholder="Minimum 6 characters"
+                minlength="6"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="reg-confirm">Confirm Password</label>
+              <input
+                type="password"
+                id="reg-confirm"
+                name="confirmPassword"
+                placeholder="Repeat your password"
+                required
+              />
+            </div>
+
+            <!-- Role selection (User is default; admin for testing) -->
+            <div class="form-group">
+              <label>Account Type</label>
+              <div class="role-select">
+                <label>
+                  <input type="radio" name="role" value="user" checked />
+                  <span>👤 Standard User</span>
+                </label>
+                <label>
+                  <input type="radio" name="role" value="admin" />
+                  <span>🛠 Admin</span>
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create Account</button>
+          </form>
+
+          <p class="auth-switch">
+            Already have an account?
+            <a onclick="switchTab('login')">Login here</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <script>
+      // Switch between Login and Register tabs
+      function switchTab(tab) {
+        // Update tab highlight
+        document.querySelectorAll(".auth-tab").forEach((t) => t.classList.remove("active"));
+        document.getElementById("tab-" + tab).classList.add("active");
+
+        // Show correct panel
+        document.querySelectorAll(".auth-panel").forEach((p) => p.classList.remove("active"));
+        document.getElementById("panel-" + tab).classList.add("active");
+      }
+
+      // Auto-open register tab if URL has ?tab=register
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("tab") === "register") {
+        switchTab("register");
+      }
+    </script>
+  </body>
+</html>

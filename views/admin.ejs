@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Event Management</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<style>
+  .main-content {
+    padding: 2rem;
+    background: #f4f7fb;
+    min-height: 100vh;
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .topbar h1 {
+    font-size: 2rem;
+    color: var(--primary);
+    margin: 0;
+  }
+
+  .primary-btn {
+    background: linear-gradient(135deg, var(--accent), #7c3aed);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.3rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s ease;
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.15);
+  }
+
+  .primary-btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
+
+  .event-form-section,
+  .event-table-section {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 24px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  }
+
+  .event-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .input-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .input-group input,
+  .input-group select,
+  .input-group textarea {
+    padding: 0.9rem 1rem;
+    border-radius: 14px;
+    border: 1px solid #dbe3ef;
+    background: #ffffff;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: 0.2s ease;
+    outline: none;
+  }
+
+  .input-group input:focus,
+  .input-group select:focus,
+  .input-group textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+  }
+
+  .full-width {
+    grid-column: 1 / -1;
+  }
+
+  .event-table-section h2 {
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+    font-size: 1.3rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 18px;
+  }
+
+  thead {
+    background: linear-gradient(135deg, var(--primary), #0f3460);
+    color: white;
+  }
+
+  th {
+    text-align: left;
+    padding: 1rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  td {
+    padding: 1rem;
+    border-bottom: 1px solid #edf2f7;
+    color: #475569;
+    font-size: 0.95rem;
+  }
+
+  tbody tr {
+    background: white;
+    transition: 0.2s ease;
+  }
+
+  tbody tr:hover {
+    background: #f8fafc;
+  }
+
+  .status {
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .status.active {
+    background: rgba(34, 197, 94, 0.12);
+    color: #16a34a;
+  }
+
+  .status.full {
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    border: none;
+    padding: 0.6rem 0.9rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    transition: 0.2s ease;
+  }
+
+  .edit-btn {
+    background: rgba(59, 130, 246, 0.1);
+    color: #2563eb;
+    margin-right: 0.5rem;
+  }
+
+  .edit-btn:hover {
+    background: rgba(59, 130, 246, 0.18);
+  }
+
+  .delete-btn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+  }
+
+  .delete-btn:hover {
+    background: rgba(239, 68, 68, 0.18);
+  }
+
+  @media (max-width: 768px) {
+    .main-content {
+      padding: 1.2rem;
+    }
+
+    .topbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  }
+</style>
+<body>
+
+     <%- include('partials/navbar') %>
+
+    <main class="main-content">
+
+        <div class="topbar">
+            <h1>Event Management</h1>
+            <button class="primary-btn">+ Add Event</button>
+        </div>
+
+        <section class="event-form-section">
+
+            <form class="event-form">
+
+                <div class="input-group">
+                    <label>Event Name</label>
+                    <input type="text" placeholder="Music Festival 2026">
+                </div>
+
+                <div class="input-group">
+                    <label>Date</label>
+                    <input type="date">
+                </div>
+
+                <div class="input-group">
+                    <label>Category</label>
+                    <select>
+                        <option>Conference</option>
+                        <option>Workshop</option>
+                        <option>Festival</option>
+                        <option>Private Event</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Capacity</label>
+                    <input type="number" placeholder="500">
+                </div>
+
+                <div class="input-group full-width">
+                    <label>Description</label>
+                    <textarea rows="5"></textarea>
+                </div>
+
+                <button class="primary-btn">Save Event</button>
+
+            </form>
+
+        </section>
+
+        <section class="event-table-section">
+
+            <h2>All Events</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Capacity</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Tech Conference</td>
+                        <td>12 Jun 2026</td>
+                        <td>Conference</td>
+                        <td>300</td>
+                        <td><span class="status active">Active</span></td>
+                        <td>
+                            <button class="edit-btn">Edit</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Summer Festival</td>
+                        <td>28 Jul 2026</td>
+                        <td>Festival</td>
+                        <td>1200</td>
+                        <td><span class="status full">Full</span></td>
+                        <td>
+                            <button class="edit-btn">Edit</button>
+                            <button class="delete-btn">Delete</button>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </main>
+
+</body>
+</html>
